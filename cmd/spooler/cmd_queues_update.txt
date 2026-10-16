@@ -1,0 +1,5 @@
+Changes the settings supplied by flags or --file; omitted settings remain
+unchanged. Flags override file values. With --uid, updates only the queue
+with that uid.
+
+Docs: {{ .OpDocsURL "updateQueue" }}

@@ -1,0 +1,5 @@
+Returns a failed message to its queue and resets its retry count. Use a
+handle from `messages --state failed --return-handle`. --delay postpones
+when it becomes visible.
+
+Docs: {{ .OpDocsURL "recoverFailure" }}

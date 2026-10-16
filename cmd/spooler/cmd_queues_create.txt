@@ -1,0 +1,4 @@
+Creates a queue and prints its attributes. --file reads a JSON queue record
+produced by `queues describe -o json`. Flags override values in the file.
+
+Docs: {{ .OpDocsURL "createQueue" }}

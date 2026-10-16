@@ -1,0 +1,4 @@
+Moves a leased message to the failed state immediately. Its payload
+remains available for inspection, recovery or discard.
+
+Docs: {{ .OpDocsURL "failMessage" }}

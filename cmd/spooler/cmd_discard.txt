@@ -1,0 +1,4 @@
+Permanently removes a message and its payload, by its handle or by a lease
+from recv. Requires --yes.
+
+Docs: {{ .OpDocsURL "discardMessage" }}

@@ -1,0 +1,4 @@
+Returns a leased message to its queue without increasing its retry count.
+--delay postpones when it becomes visible.
+
+Docs: {{ .OpDocsURL "releaseMessage" }}

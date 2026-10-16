@@ -1,0 +1,4 @@
+Prints a queue's state, settings and message counts. With `-o json`, prints
+a queue record accepted by `queues create --file` and `queues update --file`.
+
+Docs: {{ .OpDocsURL "spoolQueue" }}

@@ -1,0 +1,10 @@
+Receives and leases one message. Writes its payload to stdout or
+--data-file. Specify at least one of --ack, --lease-file or --include-meta.
+
+--ack acknowledges the message after the payload is fully written.
+--lease-file saves the lease as JSON for ack, nack, release, fail or renew.
+--include-meta prints the message's attributes on stdout, ahead of any
+payload. If no message arrives within --wait, exits with code 1 and empty
+stdout.
+
+Docs: {{ .OpDocsURL "recvMessage" }}

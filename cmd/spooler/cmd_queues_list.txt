@@ -1,0 +1,4 @@
+Lists queues in a spool. --match filters queue names using a regular
+expression. --limit caps the number of queues listed.
+
+Docs: {{ .OpDocsURL "spoolQueues" }}

@@ -1,0 +1,6 @@
+Deletes a queue. `--mode force` removes the queue and all its messages.
+`--mode drain` refuses new sends and deletes the queue once consumers have
+emptied it. Requires --yes. With --uid, deletes only the queue with that
+uid. The command may return before deletion finishes.
+
+Docs: {{ .OpDocsURL "deleteQueue" }}

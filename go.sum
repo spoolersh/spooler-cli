@@ -1,0 +1,16 @@
+github.com/gobwas/cli v0.10.0 h1:lvPg/lF+z2aiU24q32a9UPknaqZ5GLItyyBBmM0D+Wg=
+github.com/gobwas/cli v0.10.0/go.mod h1:mX7ikOehgXfP5EAibWgyP2MFktRLJUwBX57Lg+H5Qgs=
+github.com/gobwas/flagutil v0.15.0 h1:t6F2FE7uUX5CUYD3zuulKn62G/7ZVQWVzDdcwXRHCJw=
+github.com/gobwas/flagutil v0.15.0/go.mod h1:ZJ7mo3RiAFYPWcKpRyOiLBpA07CsbCuLNClziC9u6zo=
+github.com/gobwas/glob v1.0.0 h1:p+FKbLEIsK1yZ39/OINwFvqNb5oyPY4H8xcy6uYu8dg=
+github.com/gobwas/glob v1.0.0/go.mod h1:oWCdo522i2P1n/hMXGNWs7yoV4wy/ciZuUIbvKj5rkc=
+github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
+github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
+github.com/spoolersh/spooler-go v0.1.0 h1:TrS5NtJNlqtkYk0vND+eqkOqqbuvV4cQlZup++oTcqQ=
+github.com/spoolersh/spooler-go v0.1.0/go.mod h1:GIfxR0NKdg8NBZiD4FPx81DcVCnwfMOIdgieEXn8K8Q=
+go.yaml.in/yaml/v3 v3.0.5 h1:N6y/pJk8buWs9NY5ERU2HSMfm+IuD/OtfdAnq6kESPw=
+go.yaml.in/yaml/v3 v3.0.5/go.mod h1:HVTZu1O7/Vkt2N+BFy8Zza+lnLsABggaTM2ZpNIGuKg=
+golang.org/x/sys v0.49.0 h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA=
+golang.org/x/sys v0.49.0/go.mod h1:hNLxWAXmnKAxqDtdwIYC4bM9oQPEecfsnNMuSxOs3og=
+golang.org/x/term v0.47.0 h1:cpyOwQkr2Nzxe2p6KnrTG7Ei2wtzjsuSjhpXXepZ/BM=
+golang.org/x/term v0.47.0/go.mod h1:efAfAuG6RKABvg1ArGebRkvX6LXul14SM67o2e4mUCY=

@@ -1,0 +1,51 @@
+# Publishes a release from a tag: the binaries, the archives and their
+# checksums on the release page, once the tagged commit passes CI. A
+# release is cut by hand: tag the commit v<X> and push the tag; the
+# version is the tag's, which goreleaser writes into the binary.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yaml
+
+  release:
+    needs: ci
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      # The CLI never ships behaviour the SDK does not have: the tree must
+      # require a tagged SDK, not a checkout or a pseudo-version.
+      - name: Check module
+        run: |
+          if grep -q '^replace ' go.mod; then
+            echo 'go.mod has a replace directive'
+            exit 1
+          fi
+          if ! grep -Eq '^[[:space:]]*(require[[:space:]]+)?github\.com/spoolersh/spooler-go v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$' go.mod; then
+            echo 'go.mod does not require a tagged spooler-go'
+            exit 1
+          fi
+
+      - name: Release
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,2 @@
+Prints the version of this binary and of the SDK it is built with; it makes
+no request and needs no key.

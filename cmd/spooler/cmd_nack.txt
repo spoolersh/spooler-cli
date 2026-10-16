@@ -1,0 +1,4 @@
+Returns a leased message for redelivery and counts a retry. If its retries
+are exhausted, moves it to the failed state instead.
+
+Docs: {{ .OpDocsURL "nackMessage" }}

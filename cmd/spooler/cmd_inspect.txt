@@ -1,0 +1,7 @@
+Reads a message by its handle without leasing it. Writes its payload to
+stdout or --data-file. --include-meta prints its attributes on stdout,
+ahead of any payload. --meta-file writes the attributes as JSON to a file.
+
+Obtain a handle with `send --return-handle` or `messages --return-handle`.
+
+Docs: {{ .OpDocsURL "inspectMessage" }}

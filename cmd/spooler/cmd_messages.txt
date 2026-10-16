@@ -1,0 +1,7 @@
+Lists messages in a queue without their payloads. --state filters messages
+by state. --limit caps the number of messages listed.
+
+--return-handle adds a handle to each message for inspect or discard, and
+for recover when the message is in the failed state.
+
+Docs: {{ .OpDocsURL "queueMessages" }}

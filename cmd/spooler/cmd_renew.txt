@@ -1,0 +1,5 @@
+Resets a lease's expiry using the queue's current lease timeout. Prints
+the resulting expiry, if any. The lease token does not change, and
+--lease-file is left unchanged.
+
+Docs: {{ .OpDocsURL "renewLease" }}

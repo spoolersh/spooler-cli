@@ -1,0 +1,38 @@
+# Builds the release binaries and the archives from a tag; the release
+# workflow runs it. The version is the tag's, written into main.version, so
+# a release binary and a go install report the same string.
+version: 2
+
+# The archives are named after the repository, spooler-cli_<version>_<os>_<arch>,
+# which install.sh parses; the binary inside is spooler.
+project_name: spooler-cli
+
+builds:
+  - main: ./cmd/spooler
+    binary: spooler
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version=v{{ .Version }}
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+
+checksum:
+  name_template: checksums.txt
+
+# A tag with a prerelease suffix (v0.1.0-rc1) is published as one, so
+# GitHub's latest release, which install.sh downloads, skips it.
+release:
+  prerelease: auto
+
+changelog:
+  use: git

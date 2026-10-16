@@ -1,0 +1,4 @@
+Prints the spool's queue count, current message counts and cumulative
+counters. Cumulative counters include activity from deleted queues.
+
+Docs: {{ .OpDocsURL "spool" }}

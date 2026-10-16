@@ -1,0 +1,9 @@
+Sends a message to a queue with the payload of --data or --data-file.
+`--data-file -` reads it from stdin. Prints the message's id.
+
+--delay postpones when the message becomes visible. A repeat send with
+the same --dedup-string or --dedup-hash within the queue's dedup window is
+reported as a duplicate instead of enqueued again. On a new send,
+--return-handle adds a handle for inspect or discard.
+
+Docs: {{ .OpDocsURL "sendMessage" }}

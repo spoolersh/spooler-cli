@@ -1,0 +1,4 @@
+Acknowledges a leased message: it has been processed and is removed from
+the queue.
+
+Docs: {{ .OpDocsURL "ackMessage" }}

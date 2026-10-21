@@ -16,7 +16,7 @@ The official command line interface for [Spooler](https://docs.spooler.sh).
 Using a handy [install.sh](https://raw.githubusercontent.com/spoolersh/spooler-cli/main/script/install.sh):
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/spoolersh/spooler-cli/main/script/install.sh | sh
+curl -fsSL https://spooler.sh/install | sh
 ```
 
 The script downloads the latest release archive for the machine, checks it

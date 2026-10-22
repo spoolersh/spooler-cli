@@ -3,7 +3,7 @@ name: spooler-cli
 description: Use the spooler command line tool to work with the Spooler message queue from a shell, a script or an agent. Covers install, connection flags and SPOOLER_* environment variables, every command (send, recv, ack, nack, release, fail, renew, inspect, recover, discard, messages, queues, stats), lease files, output formats (-o json, table, text, csv), exit codes and script patterns. Use when a task runs the spooler binary, mentions spooler-cli, SPOOLER_API_KEY, a lease file, or needs to send, receive or triage Spooler messages without writing code.
 metadata:
   author: spoolersh
-  version: v0.2.0
+  version: v0.2.1
   docs: https://github.com/spoolersh/spooler-cli
 ---
 

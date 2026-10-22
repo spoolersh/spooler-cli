@@ -111,7 +111,7 @@ spooler nack     --lease L | --lease-file F [--spool S]
 spooler release  --lease L | --lease-file F [--spool S] [--delay D]
 spooler fail     --lease L | --lease-file F [--spool S]
 spooler renew    --lease L | --lease-file F [--spool S]
-spooler queues list [--spool S] [--limit N] [--columns C]
+spooler queues list [--spool S] [--match RE] [--limit N] [--columns C]
 spooler queues describe --queue Q [--spool S]
 spooler queues create  --queue Q | --file F [--spool S] [settings flags]
 spooler queues update  --queue Q | --file F [--spool S] [--uid U] [settings flags]
@@ -119,7 +119,7 @@ spooler queues update  --queue Q | --file F [--spool S] [--uid U] [settings flag
 settings flags: [--lease-timeout D] [--max-retries N] [--dedup-window D]
                 [--retention D] [--recv-rate-limit R --recv-burst N]
 spooler queues delete  --queue Q --mode force|drain [--spool S] [--uid U] --yes
-spooler messages --queue Q [--spool S] [--state S] [--limit N] [--columns C]
+spooler messages --queue Q [--spool S] [--state S] [--return-handle] [--limit N] [--columns C]
 spooler inspect  --handle H [--spool S] [-i] [--meta-file F] [--data-file F] [--overwrite]
 spooler recover  --handle H [--spool S] [--delay D]
 spooler discard  (--handle H | --lease L | --lease-file F) [--spool S] --yes
@@ -716,7 +716,8 @@ tests add no variable to the contract; CI also lints it with shellcheck
 and `dash -n`. The README carries its raw GitHub URL until the site serves
 it under `spooler.sh`. A
 release is a tag pushed by hand, `v0.1.0`, on a commit whose `go.mod`
-requires a tagged SDK with no `replace`; the release workflow checks that
+requires a tagged SDK with no `replace` and whose skill names the tag as
+its `metadata.version`; the release workflow checks both
 and runs GoReleaser (`.goreleaser.yaml`), which builds the binaries with
 the tag's version written into `main.version` and puts the archives and
 their checksums on the release page. The
@@ -729,6 +730,31 @@ workflow checks against the tag.
 it is what a person or an agent tries first, and the root's one flag that
 is not about the connection. It has no environment twin: exported, it
 would replace every command.
+
+## The skill
+
+`skills/spooler-cli/SKILL.md` is an [Agent Skill](https://agentskills.io)
+for agents that *use* the CLI, installable with `npx skills add
+spoolersh/spooler-cli` and mirrored into the `spoolersh/ai` repo. It is
+published content, like the README: the commands, their flags, the
+output formats, the exit codes and the script patterns, in the few
+thousand tokens an agent loads. It is not loaded by agents working on
+this repo and says nothing about how the CLI is built.
+
+- **Whoever changes the CLI's contract updates the skill in the same
+  change**: a command, a flag, an output shape, an exit code, an
+  environment twin, or a rule in the Commands section above. Nothing
+  checks this mechanically: before a hand-off, read the skill against
+  `spooler help` and each command's `-h`, and fix every name, flag and
+  code that differs.
+- The skill never restates API behaviour beyond what a script needs in
+  context (what a settle does, when a send retry is safe), copied from
+  the docs and cited; the docs stay the source.
+- The skill's `metadata.version` is the release it describes, the tag
+  verbatim: a release commit bumps it to the tag about to be pushed, and
+  the release workflow refuses a tag that disagrees with it.
+- The same voice as the README and the help texts: terse, factual, the
+  docs' vocabulary, flags written as the help prints them.
 
 ## Editing files
 

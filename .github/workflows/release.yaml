@@ -43,9 +43,34 @@ jobs:
             exit 1
           fi
 
+      # The skill describes one release: the one the tag names.
+      - name: Check skill version
+        run: |
+          grep -Fxq "  version: $GITHUB_REF_NAME" skills/spooler-cli/SKILL.md
+
       - name: Release
         uses: goreleaser/goreleaser-action@v6
         with:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Tells spoolersh/ai to mirror skills/spooler-cli from this release, so
+  # the copy there does not wait for the daily run. Its own job: the
+  # release is out once the job above ends, and a failed dispatch must not
+  # paint it red. GITHUB_TOKEN cannot dispatch to another repository;
+  # MIRROR_TOKEN is a token with contents write on spoolersh/ai.
+  mirror:
+    needs: release
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Dispatch
+        run: |
+          gh api repos/spoolersh/ai/dispatches \
+            -f event_type=mirror \
+            -f "client_payload[repository]=$GITHUB_REPOSITORY" \
+            -f "client_payload[tag]=$GITHUB_REF_NAME"
+        env:
+          GH_TOKEN: ${{ secrets.MIRROR_TOKEN }}

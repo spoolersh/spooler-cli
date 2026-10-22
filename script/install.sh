@@ -20,6 +20,11 @@ fail() {
 	exit 1
 }
 
+# say prints a progress line on stderr, so stdout carries the result alone.
+say() {
+	echo "install.sh: $*" >&2
+}
+
 # fetch downloads url to the file out, over https only.
 fetch() {
 	if command -v curl >/dev/null 2>&1; then
@@ -60,8 +65,10 @@ main() {
 	version=${version#v}
 	if [ -n "$version" ]; then
 		release="https://github.com/$repo/releases/download/v$version"
+		lookup="release v$version"
 	else
 		release="https://github.com/$repo/releases/latest/download"
+		lookup="the latest release"
 	fi
 	dir=${SPOOLER_INSTALL_DIR:-$HOME/.local/bin}
 
@@ -75,6 +82,7 @@ main() {
 	# archive, which carries the version; that is how "latest" is resolved,
 	# once: the archive is then fetched from that release by its tag, so a
 	# release landing in between cannot split the two.
+	say "looking up $lookup"
 	fetch "$release/checksums.txt" "$tmp/checksums.txt" ||
 		fail "no release found at $release"
 	name=$(awk -v s="_${os}_${arch}.tar.gz" \
@@ -86,6 +94,7 @@ main() {
 	version=${version%_"${os}"_"${arch}".tar.gz}
 	release="https://github.com/$repo/releases/download/v$version"
 
+	say "downloading spooler v$version for $os/$arch"
 	fetch "$release/$name" "$tmp/$name" ||
 		fail "download $release/$name failed"
 	act=$(sha256 "$tmp/$name")
@@ -98,8 +107,14 @@ main() {
 
 	echo "installed spooler v$version to $dir/spooler"
 	case ":$PATH:" in
-	*":$dir:"*) ;;
-	*) echo "$dir is not on PATH" ;;
+	*":$dir:"*)
+		echo "Run 'spooler help' to get started."
+		;;
+	*)
+		echo "$dir is not on PATH; add it with:"
+		echo "  export PATH=\"$dir:\$PATH\""
+		echo "Run '$dir/spooler help' to get started."
+		;;
 	esac
 }
 

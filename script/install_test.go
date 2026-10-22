@@ -56,7 +56,7 @@ type result struct {
 
 // TestInstall runs install.sh against a fixture release served by a stub
 // curl. Expectations name the install directory DIR, the archive NAME, its
-// checksum SUM and a corrupted archive's checksum BAD.
+// checksum SUM, a corrupted archive's checksum BAD and the os/arch PLATFORM.
 func TestInstall(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("install.sh is for Linux and macOS")
@@ -81,7 +81,11 @@ func TestInstall(t *testing.T) {
 			name: "latest",
 			exp: result{
 				stdout: "installed spooler v0.1.0 to DIR/spooler\n" +
-					"DIR is not on PATH\n",
+					"DIR is not on PATH; add it with:\n" +
+					"  export PATH=\"DIR:$PATH\"\n" +
+					"Run 'DIR/spooler help' to get started.\n",
+				stderr: "install.sh: looking up the latest release\n" +
+					"install.sh: downloading spooler v0.1.0 for PLATFORM\n",
 				urls: repo + "/releases/latest/download/checksums.txt\n" +
 					repo + "/releases/download/v0.1.0/NAME\n",
 				installed: "stand-in\n",
@@ -92,7 +96,11 @@ func TestInstall(t *testing.T) {
 			version: "0.1.0",
 			exp: result{
 				stdout: "installed spooler v0.1.0 to DIR/spooler\n" +
-					"DIR is not on PATH\n",
+					"DIR is not on PATH; add it with:\n" +
+					"  export PATH=\"DIR:$PATH\"\n" +
+					"Run 'DIR/spooler help' to get started.\n",
+				stderr: "install.sh: looking up release v0.1.0\n" +
+					"install.sh: downloading spooler v0.1.0 for PLATFORM\n",
 				urls: repo + "/releases/download/v0.1.0/checksums.txt\n" +
 					repo + "/releases/download/v0.1.0/NAME\n",
 				installed: "stand-in\n",
@@ -103,7 +111,11 @@ func TestInstall(t *testing.T) {
 			version: "v0.1.0",
 			exp: result{
 				stdout: "installed spooler v0.1.0 to DIR/spooler\n" +
-					"DIR is not on PATH\n",
+					"DIR is not on PATH; add it with:\n" +
+					"  export PATH=\"DIR:$PATH\"\n" +
+					"Run 'DIR/spooler help' to get started.\n",
+				stderr: "install.sh: looking up release v0.1.0\n" +
+					"install.sh: downloading spooler v0.1.0 for PLATFORM\n",
 				urls: repo + "/releases/download/v0.1.0/checksums.txt\n" +
 					repo + "/releases/download/v0.1.0/NAME\n",
 				installed: "stand-in\n",
@@ -114,7 +126,8 @@ func TestInstall(t *testing.T) {
 			version: "9.9.9",
 			exp: result{
 				code: 1,
-				stderr: "install.sh: no release found at " +
+				stderr: "install.sh: looking up release v9.9.9\n" +
+					"install.sh: no release found at " +
 					repo + "/releases/download/v9.9.9\n",
 				urls: repo + "/releases/download/v9.9.9/checksums.txt\n",
 			},
@@ -123,8 +136,10 @@ func TestInstall(t *testing.T) {
 			name:    "corrupt archive",
 			corrupt: true,
 			exp: result{
-				code:   1,
-				stderr: "install.sh: checksum of NAME is BAD; want SUM\n",
+				code: 1,
+				stderr: "install.sh: looking up the latest release\n" +
+					"install.sh: downloading spooler v0.1.0 for PLATFORM\n" +
+					"install.sh: checksum of NAME is BAD; want SUM\n",
 				urls: repo + "/releases/latest/download/checksums.txt\n" +
 					repo + "/releases/download/v0.1.0/NAME\n",
 			},
@@ -134,8 +149,8 @@ func TestInstall(t *testing.T) {
 			noArchive: true,
 			exp: result{
 				code: 1,
-				stderr: "install.sh: no archive for " +
-					runtime.GOOS + "/" + runtime.GOARCH + " in the release\n",
+				stderr: "install.sh: looking up the latest release\n" +
+					"install.sh: no archive for PLATFORM in the release\n",
 				urls: repo + "/releases/latest/download/checksums.txt\n",
 			},
 		},
@@ -265,6 +280,7 @@ func TestInstall(t *testing.T) {
 				"NAME", name,
 				"SUM", sum,
 				"BAD", bad,
+				"PLATFORM", runtime.GOOS+"/"+runtime.GOARCH,
 			)
 			exp.stdout = r.Replace(exp.stdout)
 			exp.stderr = r.Replace(exp.stderr)

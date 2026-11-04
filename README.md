@@ -11,9 +11,14 @@ The official command line interface for [Spooler](https://docs.spooler.sh).
 
 ## Installation
 
+#### Building from source
+```sh
+go install github.com/spoolersh/spooler-cli/cmd/spooler@latest
+```
+
 #### Linux or macOS
 
-Using a handy [install.sh](https://raw.githubusercontent.com/spoolersh/spooler-cli/main/script/install.sh):
+Using [install script](https://raw.githubusercontent.com/spoolersh/spooler-cli/main/script/install.sh):
 
 ```sh
 curl -fsSL https://spooler.sh/install | sh
@@ -27,10 +32,6 @@ directory. It script touches nothing else: no `sudo` or shell configuration.
 Alternatively, you can download an archive from the **[releases
 page](https://github.com/spoolersh/spooler-cli/releases)** by hand.
 
-#### Building from source
-```sh
-go install github.com/spoolersh/spooler-cli/cmd/spooler@latest
-```
 
 ## Usage
 

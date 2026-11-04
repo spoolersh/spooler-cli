@@ -371,18 +371,21 @@ func flagParseOptions(fs *flag.FlagSet, args []string, profile *profileEntry) (
 					return []string{"q", name}
 				case "spool":
 					return []string{"s", name}
+				case "version":
+					return []string{"v", name}
 				}
 				return []string{name}
 			}),
 		),
-		// The environment twice around the profile: first the profile's
-		// own selection, then, once the profile has set what the command
-		// line left unset, the rest, so a flag beats the profile and the
-		// profile beats a variable. Only the context has a variable: where,
-		// as whom and how loudly the CLI runs, and the spool and queue a
-		// session works in, as git and kubectl read their environment.
-		// Everything else shapes one invocation and is asked for on its
-		// command line.
+		// The environment twice around the profile: first the profile's own
+		// selection, then, once the profile has set what the command line left
+		// unset, the rest, so a flag beats the profile and the profile beats a
+		// variable.
+		//
+		// Only the context has a variable: where, as whom and how loudly the
+		// CLI runs, and the spool and queue a session works in, as git and
+		// kubectl read their environment. Everything else shapes one
+		// invocation and is asked for on its command line.
 		flagutil.WithParser(
 			&env.Parser{
 				Prefix:       "SPOOLER_",

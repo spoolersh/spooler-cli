@@ -23,6 +23,7 @@ var _ client = (*fakeClient)(nil)
 // field fails with an error naming the method.
 type fakeClient struct {
 	DoSend        func(context.Context, spooler.SendRequest) (spooler.SendResult, error)
+	DoAckAndSend  func(context.Context, spooler.AckAndSendRequest) (spooler.AckAndSendResult, error)
 	DoRecv        func(context.Context, spooler.RecvRequest) (spooler.RecvResult, bool, error)
 	DoAck         func(context.Context, spooler.AckRequest) error
 	DoNack        func(context.Context, spooler.NackRequest) error
@@ -54,6 +55,13 @@ func (f *fakeClient) Send(ctx context.Context, req spooler.SendRequest) (spooler
 		return spooler.SendResult{}, notStubbed("Send")
 	}
 	return f.DoSend(ctx, req)
+}
+
+func (f *fakeClient) AckAndSend(ctx context.Context, req spooler.AckAndSendRequest) (spooler.AckAndSendResult, error) {
+	if f.DoAckAndSend == nil {
+		return spooler.AckAndSendResult{}, notStubbed("AckAndSend")
+	}
+	return f.DoAckAndSend(ctx, req)
 }
 
 func (f *fakeClient) Recv(ctx context.Context, req spooler.RecvRequest) (spooler.RecvResult, bool, error) {

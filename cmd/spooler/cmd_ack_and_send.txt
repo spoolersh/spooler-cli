@@ -1,0 +1,11 @@
+Acknowledges a leased message and sends a new one atomically. The lease names
+the message to acknowledge and --queue the queue to send to, the same one or
+another. The payload is --data or --data-file; `--data-file -` reads it from
+stdin. Prints the new message's id.
+
+--delay postpones when the new message becomes visible. A send with the same
+--dedup-string or --dedup-hash within the queue's dedup window is refused as a
+whole, and nothing is acknowledged. --return-handle adds a handle to the new
+message for inspect or discard.
+
+Docs: {{ .OpDocsURL "ackAndSend" }}

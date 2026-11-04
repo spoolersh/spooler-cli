@@ -11,6 +11,7 @@ import (
 // spooler.Queues and spooler.Messages, take it as the pager they walk.
 type client interface {
 	Send(context.Context, spooler.SendRequest) (spooler.SendResult, error)
+	AckAndSend(context.Context, spooler.AckAndSendRequest) (spooler.AckAndSendResult, error)
 	Recv(context.Context, spooler.RecvRequest) (spooler.RecvResult, bool, error)
 	Ack(context.Context, spooler.AckRequest) error
 	Nack(context.Context, spooler.NackRequest) error

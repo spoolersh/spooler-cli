@@ -173,6 +173,23 @@ func formatSendResult(r spooler.SendResult) sendResultOutput {
 	}
 }
 
+// ackAndSendResultOutput is an ack-and-send's outcome as the CLI prints it:
+// the Spooler-* headers of the response by their docs' names
+// (https://docs.spooler.sh/operations/ackAndSend).
+type ackAndSendResultOutput struct {
+	ID     string `json:"id"`
+	Handle string `json:"handle,omitempty"`
+}
+
+// formatAckAndSendResult converts an ack-and-send's result into its output
+// form.
+func formatAckAndSendResult(r spooler.AckAndSendResult) ackAndSendResultOutput {
+	return ackAndSendResultOutput{
+		ID:     r.ID,
+		Handle: string(r.Handle),
+	}
+}
+
 // recvResultOutput is a receive's outcome as the CLI prints it and as
 // --lease-file stores it: the Spooler-* headers of the response by their
 // docs' names (https://docs.spooler.sh/operations/recvMessage), without the

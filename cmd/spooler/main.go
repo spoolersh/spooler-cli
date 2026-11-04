@@ -132,6 +132,10 @@ func app(newClient func(*spooler.Client) client) (*cli.Runner, cli.Command) {
 			config: &config,
 			output: makeOutput[renewResultOutput]("json", nil, "text", "json"),
 		},
+		"ack-and-send": &ackAndSendCommand{
+			config: &config,
+			output: makeOutput[ackAndSendResultOutput]("json", nil, "text", "json"),
+		},
 		"inspect": &inspectCommand{
 			config: &config,
 			output: makeOutput[inspectResultOutput]("json", nil, "text", "json"),
@@ -165,6 +169,7 @@ func app(newClient func(*spooler.Client) client) (*cli.Runner, cli.Command) {
 			"release",
 			"fail",
 			"renew",
+			"ack-and-send",
 			"inspect",
 			"recover",
 			"discard",

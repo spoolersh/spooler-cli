@@ -7,7 +7,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strings"
 	"text/template"
 
 	"github.com/gobwas/cli"
@@ -89,41 +88,12 @@ func (c *sendCommand) Run(ctx context.Context, args []string) (err error) {
 			"--dedup-hash and --dedup-string are mutually exclusive",
 		)
 	}
-	var dataSource spooler.DataSource
-	switch {
-	case c.data != nil && c.dataFile != nil:
-		return cli.Exitf(2, "--data and --data-file are mutually exclusive")
-
-	case c.data == nil && c.dataFile == nil:
-		return cli.Exitf(2,
-			"no payload: pass --data, --data-file, or `--data-file -` for stdin",
-		)
-
-	case c.data != nil:
-		dataSource = spooler.DataSourceReadSeeker(strings.NewReader(*c.data))
-
-	case *c.dataFile == "-":
-		// NOTE: stdin is not seekable, so no retries are possible.
-		dataSource = spooler.DataSourceReader(os.Stdin)
-
-	default:
-		file, err := os.Open(*c.dataFile)
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-		info, err := file.Stat()
-		if err != nil {
-			return err
-		}
-		if info.Mode().IsRegular() {
-			// A regular file can be rewound, which enables retries.
-			dataSource = spooler.DataSourceReadSeeker(file)
-		} else {
-			// A pipe, FIFO or device (<(cmd), /dev/stdin) can't seek: the
-			// SDK would fail measuring it, so stream it once.
-			dataSource = spooler.DataSourceReader(file)
-		}
+	dataSource, closer, err := readData(c.data, c.dataFile)
+	if err != nil {
+		return err
+	}
+	if closer != nil {
+		defer closer.Close()
 	}
 
 	enc, err := c.output.encoderTo(os.Stdout)

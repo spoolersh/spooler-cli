@@ -1,6 +1,6 @@
 ---
 name: spooler-cli
-description: Use the spooler command line tool to work with the Spooler message queue from a shell, a script or an agent. Covers install, connection flags and SPOOLER_* environment variables, every command (send, recv, ack, nack, release, fail, renew, inspect, recover, discard, messages, queues, stats), lease files, output formats (-o json, table, text, csv), exit codes and script patterns. Use when a task runs the spooler binary, mentions spooler-cli, SPOOLER_API_KEY, a lease file, or needs to send, receive or triage Spooler messages without writing code.
+description: Use the spooler command line tool to work with the Spooler message queue from a shell, a script or an agent. Covers install, connection flags and SPOOLER_* environment variables, every command (send, recv, ack, nack, release, fail, renew, ack-and-send, inspect, recover, discard, messages, queues, stats), lease files, output formats (-o json, table, text, csv), exit codes and script patterns. Use when a task runs the spooler binary, mentions spooler-cli, SPOOLER_API_KEY, a lease file, or needs to send, receive or triage Spooler messages without writing code.
 metadata:
   author: spoolersh
   version: v0.2.1
@@ -20,8 +20,9 @@ skill explains it in full.
 
 ## Rules
 
-- A receive leases; settle every delivery with `ack`, `nack`, `release`, `fail`
-  or `discard`, or the lease times out and the message is redelivered. Delivery
+- A receive leases; settle every delivery with `ack`, `nack`, `release`, `fail`,
+  `discard` or `ack-and-send`, or the lease times out and the message is
+  redelivered. Delivery
   is at least once: a script's effect must be idempotent.
 - `nack` is the error path (counts a retry); `release` is for "not the
   message's fault" and counts nothing; `fail` marks poison for a human. Both
@@ -87,6 +88,7 @@ spooler nack     (--lease L | --lease-file F)
 spooler release  (--lease L | --lease-file F) [--delay D]
 spooler fail     (--lease L | --lease-file F)
 spooler renew    (--lease L | --lease-file F)
+spooler ack-and-send (--lease L | --lease-file F) --queue Q [--delay D] [--dedup-string K | --dedup-hash H] [--return-handle] (--data S | --data-file F)
 spooler inspect  --handle H [-i] [--meta-file F] [--data-file F]
 spooler recover  --handle H [--delay D]
 spooler discard  (--handle H | --lease L | --lease-file F) --yes
@@ -126,6 +128,10 @@ Rules that catch scripts:
 - Retrying a `send` after exit 100 is safe only with the same `--dedup-string`
   or `--dedup-hash` the first attempt carried, inside the queue's dedup window
   (be conservative in your estimation on the window size).
+- `ack-and-send` acks the lease and sends the new message to `--queue` as one
+  atomic step, both or neither; a dedup hit refuses the whole call and acks
+  nothing. After exit 100 a retry is safe without a dedup key: a retry of a
+  call that committed is refused and sends nothing.
 - An output flag is refused where it would do nothing, exit 2: `ack -o json` is
   an unknown flag (so are `nack`, `release`, `fail`, `discard`, `recover`,
   `queues update` and `queues delete` with one); `recv` and `inspect` take
@@ -201,6 +207,15 @@ spooler messages --queue orders --state failed --return-handle -o json --compact
     spooler inspect --handle "$h" -i --data-file /dev/null
     spooler recover --handle "$h"          # or: spooler discard --handle "$h" --yes
   done
+```
+
+A pipeline step, handing its result to the next queue with no window where
+the input is acked and the output missing:
+
+```sh
+spooler recv --queue stage1 --wait 20s --lease-file lease.json --data-file in.bin --overwrite
+./transform in.bin > out.bin
+spooler ack-and-send --lease-file lease.json --queue stage2 --data-file out.bin
 ```
 
 Describe a queue, then recreate it elsewhere:

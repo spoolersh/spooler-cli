@@ -65,9 +65,11 @@ in: internal hostnames, topology, replication or storage details, limits typed
 from memory, pricing, roadmap, or anything from the private repos' source.
 Every statement must be checkable with an API key.
 
-The local evaluation image `spoolersh/memspoold` is NOT open source: it ships
-under the Spooler Local Evaluation License. Never call it "OSS" or "open
-source"; say "free for development and testing". The CLI itself is open source.
+The in-memory image `spoolersh/memspoolerd` is NOT open source: it ships
+under the memspoolerd License (run it for your own purposes, production
+included; never provide it to others or host it as a service). Never call it
+"OSS" or "open source"; say "free to run yourself". The CLI itself is open
+source.
 
 ## Vocabulary
 

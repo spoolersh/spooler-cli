@@ -57,11 +57,11 @@ Flags go before the command; each has an environment twin, and the flag wins:
 | `--queue`, `-q` | `SPOOLER_QUEUE` | required where the operation names a queue |
 | `--profile`, `-p` | `SPOOLER_PROFILE` | profile from `~/.config/spooler/config.yaml` (`--config`, `-C`) |
 
-Local image, free for development and testing (any key, one spool `default`,
-nothing persists):
+Local image, free to run yourself (any key, one spool `default`, nothing
+persists):
 
 ```sh
-docker run --rm -p 127.0.0.1:8080:8080 spoolersh/memspoold
+docker run --rm -p 127.0.0.1:8080:8080 spoolersh/memspoolerd
 export SPOOLER_HOST=127.0.0.1:8080 SPOOLER_NO_TLS=true SPOOLER_API_KEY=local SPOOLER_SPOOL=default
 ```
 

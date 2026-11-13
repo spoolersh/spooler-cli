@@ -43,10 +43,10 @@ spooler help
 You can test `spooler` CLI against [locally running image](https://docs.spooler.sh/local):
 
 ```sh
-docker run --rm -p 127.0.0.1:8080:8080 spoolersh/memspoold
+docker run --rm -p 127.0.0.1:8080:8080 spoolersh/memspoolerd
 ```
 
-> The image is free for development and testing, has one spool named `default`, and loses its data when it stops:
+> The image is free to run yourself, has one spool named `default`, and loses its data when it stops:
 
 Configure the CLI:
 
